@@ -61,8 +61,7 @@ func ConnectResource(resource string) {
 memcached:
 
 	if resource == "memcached" {
-		test := 10
-		for test == 10 {
+		for  {
 			fmt.Print("goched> ")
 			reader := bufio.NewReader(os.Stdin)
 			cmd, _ := reader.ReadString('\n')
@@ -81,8 +80,7 @@ memcached:
 aerospike:
 
 	if resource == "aerospike" {
-		test := 10
-		for test == 10 {
+		for  {
 			fmt.Print("gospike> ")
 			reader := bufio.NewReader(os.Stdin)
 			cmd, _ := reader.ReadString('\n')
@@ -106,11 +104,10 @@ func PrintHelp() {
 
 func main() {
 	var resource string
-	test := 10
 	if len(os.Args[:]) > 1 {
 		ConnectResource(os.Args[1])
 	}
-	for test == 10 {
+	for  {
 		fmt.Print("> ")
 		fmt.Scanf("%s\n", &resource)
 		if resource == "h" || resource == "help" {
