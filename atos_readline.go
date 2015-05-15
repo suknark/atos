@@ -1,24 +1,19 @@
 package main
 
 import (
+	"bufio"
 	"encoding/json"
 	"fmt"
-	"github.com/fiorix/go-readline"
 	"net"
 	"os"
 	"strings"
+	"github.com/fiorix/go-readline"
 )
 
 var coutsExamps = map[string][]string{
 	"m": {"memcached", "me"},
 	"e": {"elasticsearch", "el"},
 	"a": {"aerospike", "ae"},
-}
-
-type Config struct {
-	Memcached     string
-	Aerospike     string
-	Elasticsearch string
 }
 
 func completer(input, line string, start, end int) []string {
@@ -29,6 +24,12 @@ func completer(input, line string, start, end int) []string {
 		}
 	}
 	return []string{}
+}
+
+type Config struct {
+	Memcached     string
+	Aerospike     string
+	Elasticsearch string
 }
 
 func ReadConfig() (string, string, string) {
@@ -57,8 +58,9 @@ func StatsItems(command string, netAdr string) (string, error) {
 		os.Exit(1)
 	}
 	if strings.Index(netAdr, ":9200") != -1 {
-		command = strings.Replace(command, "\n", "", -1) + " HTTP/1.1\n"
+		command = "GET " + strings.Replace(command, "\n", "", -1) + " HTTP/1.1\n"
 	}
+	fmt.Println(command)
 	_, err = conn.Write([]byte(command + "\n"))
 	if err != nil {
 		println("Write to server failed:", err.Error())
@@ -79,80 +81,76 @@ func StatsItems(command string, netAdr string) (string, error) {
 func ConnectResource(resource string) {
 
 	memAddr, aeAddr, elAddr := ReadConfig()
-	readline.SetCompletionFunction(completer)
-	readline.ParseAndBind("TAB: menu-complete")
 
 memcached:
 
-	if resource == "memcached" || resource == "me" {
+	if resource == "memcached" {
 		for {
-			p := "goched> "
-			cmd := readline.Readline(&p)
-
-			if *cmd == "exit" || *cmd == "q" {
+			fmt.Print("goched> ")
+			reader := bufio.NewReader(os.Stdin)
+			cmd, _ := reader.ReadString('\n')
+			if cmd == "exit\n" || cmd == "q\n" {
 				break
 			}
-			if *cmd == "aerospike" || *cmd == "ae" {
+			if cmd == "aerospike\n" {
 				resource = "aerospike"
 				goto aerospike
 			}
-			if *cmd == "elasticsearch" || *cmd == "el" {
+			if cmd == "elasticsearch\n" {
 				resource = "elasticsearch"
 				goto elasticsearch
 			}
 
-			stat_items, _ := StatsItems(*cmd, memAddr)
+			stat_items, _ := StatsItems(cmd, memAddr)
 			fmt.Printf("%s\n", string(stat_items))
-			readline.AddHistory(*cmd)
 		}
 	}
 
 aerospike:
 
-	if resource == "aerospike" || resource == "ae" {
+	if resource == "aerospike" {
 		for {
-			p := "gospike> "
-			cmd := readline.Readline(&p)
-
-			if *cmd == "exit" || *cmd == "q" {
+			fmt.Print("gospike> ")
+			reader := bufio.NewReader(os.Stdin)
+			cmd, _ := reader.ReadString('\n')
+			if cmd == "exit\n" || cmd == "q\n" {
 				break
 			}
-			if *cmd == "memcached" || *cmd == "me" {
+			if cmd == "memcached\n" {
 				resource = "memcached"
 				goto memcached
 			}
-			if *cmd == "elasticsearch" || *cmd == "el" {
+			if cmd == "elasticsearch\n" {
 				resource = "elasticsearch"
 				goto elasticsearch
 			}
 
-			it, _ := StatsItems(*cmd, aeAddr)
+			it, _ := StatsItems(cmd, aeAddr)
 			fmt.Printf("%s\n", it)
-			readline.AddHistory(*cmd)
 		}
 	}
 
 elasticsearch:
-	if resource == "elasticsearch" || resource == "el" {
+	if resource == "elasticsearch" {
 		for {
-			p := "goched> "
-			cmd := readline.Readline(&p)
-
-			if *cmd == "exit" || *cmd == "q" {
+			fmt.Print("gostic> ")
+			reader := bufio.NewReader(os.Stdin)
+			cmd, _ := reader.ReadString('\n')
+			if cmd == "exit\n" || cmd == "q\n" {
 				break
 			}
-			if *cmd == "memcached" || *cmd == "me" {
+			if cmd == "memcached\n" {
 				resource = "memcached"
 				goto memcached
 			}
 
-			if *cmd == "aerospike" || *cmd == "ae" {
-				resource = "erospike"
-				goto aerospike
+			if cmd == "memcached\n" {
+				resource = "memcached"
+				goto memcached
 			}
-			it, _ := StatsItems(*cmd, elAddr)
+			it, _ := StatsItems(cmd, elAddr)
 			fmt.Printf("%s\n", it)
-			readline.AddHistory(*cmd)
+
 		}
 	}
 
