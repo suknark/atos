@@ -15,6 +15,11 @@ var coutsExamps = map[string][]string{
 	"a": {"aerospike", "ae"},
 }
 
+type Colors struct {
+            Set string
+            Reset string
+}
+
 type Config struct {
 	Memcached     string
 	Aerospike     string
@@ -81,12 +86,13 @@ func ConnectResource(resource string) {
 	memAddr, aeAddr, elAddr := ReadConfig()
 	readline.SetCompletionFunction(completer)
 	readline.ParseAndBind("TAB: menu-complete")
+    color := Colors{"\033[36m", "\033[0m"}
 
 memcached:
 
 	if resource == "memcached" || resource == "me" {
 		for {
-			p := "goched> "
+			p := color.Set + "goched> " + color.Reset
 			cmd := readline.Readline(&p)
 
 			if *cmd == "exit" || *cmd == "q" {
@@ -112,7 +118,7 @@ aerospike:
 
 	if resource == "aerospike" || resource == "ae" {
 		for {
-			p := "gospike> "
+			p := color.Set + "gospike> " + color.Reset
 			cmd := readline.Readline(&p)
 
 			if *cmd == "exit" || *cmd == "q" {
@@ -136,7 +142,7 @@ aerospike:
 elasticsearch:
 	if resource == "elasticsearch" || resource == "el" {
 		for {
-			p := "gostic> "
+			p := color.Set + "gostic> " + color.Reset
 			cmd := readline.Readline(&p)
 
 			if *cmd == "exit" || *cmd == "q" {
@@ -166,7 +172,8 @@ func PrintHelp() {
 func main() {
 	memAddr, aeAddr, elAddr := ReadConfig()
 	var adr, c string
-	readline.SetCompletionFunction(completer)
+	color := Colors{"\033[36m", "\033[0m"}
+    readline.SetCompletionFunction(completer)
 	readline.ParseAndBind("TAB: menu-complete")
 	if len(os.Args[:]) > 1 {
 		if len(os.Args[:]) > 2 {
@@ -190,7 +197,7 @@ func main() {
 		}
 	}
 	for {
-		promt := "> "
+		promt := color.Set + "> " + color.Reset
 		resource := readline.Readline(&promt)
 		if *resource == "h" || *resource == "help" {
 			PrintHelp()
