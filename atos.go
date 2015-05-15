@@ -41,7 +41,7 @@ func StatsItems(command string, netAdr string) (string, error) {
 		os.Exit(1)
 	}
 	if strings.Index(netAdr, ":9200") != -1 {
-		command = "GET " + strings.Replace(command, "\n", "", -1) + " HTTP/1.1\n"
+		command = strings.Replace(command, "\n", "", -1) + " HTTP/1.1\n"
 	}
 	_, err = conn.Write([]byte(command + "\n"))
 	if err != nil {
@@ -66,7 +66,7 @@ func ConnectResource(resource string) {
 
 memcached:
 
-	if resource == "memcached" {
+	if resource == "memcached" || resource == "me"{
 		for {
 			fmt.Print("goched> ")
 			reader := bufio.NewReader(os.Stdin)
@@ -74,11 +74,11 @@ memcached:
 			if cmd == "exit\n" || cmd == "q\n" {
 				break
 			}
-			if cmd == "aerospike\n" {
+			if cmd == "aerospike\n" || cmd == "ae\n" {
 				resource = "aerospike"
 				goto aerospike
 			}
-			if cmd == "elasticsearch\n" {
+			if cmd == "elasticsearch\n" || cmd == "el\n" {
 				resource = "elasticsearch"
 				goto elasticsearch
 			}
@@ -90,7 +90,7 @@ memcached:
 
 aerospike:
 
-	if resource == "aerospike" {
+	if resource == "aerospike" || resource == "ae" {
 		for {
 			fmt.Print("gospike> ")
 			reader := bufio.NewReader(os.Stdin)
@@ -98,11 +98,11 @@ aerospike:
 			if cmd == "exit\n" || cmd == "q\n" {
 				break
 			}
-			if cmd == "memcached\n" {
+			if cmd == "memcached\n" || cmd == "me\n" {
 				resource = "memcached"
 				goto memcached
 			}
-			if cmd == "elasticsearch\n" {
+			if cmd == "elasticsearch\n" || cmd == "el\n" {
 				resource = "elasticsearch"
 				goto elasticsearch
 			}
@@ -113,7 +113,7 @@ aerospike:
 	}
 
 elasticsearch:
-	if resource == "elasticsearch" {
+	if resource == "elasticsearch" || resource == "el" {
 		for {
 			fmt.Print("gostic> ")
 			reader := bufio.NewReader(os.Stdin)
@@ -121,14 +121,14 @@ elasticsearch:
 			if cmd == "exit\n" || cmd == "q\n" {
 				break
 			}
-			if cmd == "memcached\n" {
+			if cmd == "memcached\n" || cmd == "me\n"{
 				resource = "memcached"
 				goto memcached
 			}
 
-			if cmd == "memcached\n" {
-				resource = "memcached"
-				goto memcached
+			if cmd == "aerospike\n" || cmd == "ae\n" {
+				resource = "erospike"
+				goto aerospike
 			}
 			it, _ := StatsItems(cmd, elAddr)
 			fmt.Printf("%s\n", it)
@@ -147,13 +147,13 @@ func main() {
 	var resource, adr, c string
 	if len(os.Args[:]) > 1 {
 		if len(os.Args[:]) > 2 {
-			if os.Args[1] == "memcached" {
+			if os.Args[1] == "memcached" || os.Args[1] == "me"{
 				adr = memAddr
 			}
-			if os.Args[1] == "aerospike" {
+			if os.Args[1] == "aerospike" || os.Args[1] == "ae"{
 				adr = aeAddr
 			}
-			if os.Args[1] == "elasticsearch" {
+			if os.Args[1] == "elasticsearch" || os.Args[1] == "el"{
 				adr = elAddr
 			}
 			for _, cc := range os.Args[2:] {
