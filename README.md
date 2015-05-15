@@ -22,7 +22,14 @@ or
 root@duma:~$ ./atos memcached
 goched> stats items
 STAT items:1:number 10
+STAT items:1:age 79546  
+```
+or
+```
+root@duma:~$ ./atos memcached stats items
+STAT items:1:number 10
 STAT items:1:age 79546
+root@duma:~$
 ```
 You can move from one service to other:  
 ```
