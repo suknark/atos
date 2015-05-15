@@ -4,7 +4,7 @@ Docs for commands aerospike
 http://www.aerospike.com/docs/reference/info/  
 Docs for commands memcached  
 https://code.google.com/p/memcached/
-Docs for commands elasticsearch
+Docs for commands elasticsearch  
 https://www.elastic.co/guide/en/elasticsearch/guide/master/_talking_to_elasticsearch.html
 
 **Simple usage:**
