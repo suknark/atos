@@ -10,9 +10,9 @@ import (
 )
 
 var coutsExamps = map[string][]string{
-	"m": {"memcached", "me"},
-	"e": {"elasticsearch", "el"},
-	"a": {"aerospike", "ae"},
+	"m": {"memcached"},
+	"e": {"elasticsearch"},
+	"a": {"aerospike"},
 }
 
 type Colors struct {
