@@ -18,8 +18,8 @@ var coutsExamps = map[string][]string{
 }
 
 type Colors struct {
-            Set string
-            Reset string
+	Set   string
+	Reset string
 }
 
 type Config struct {
@@ -88,12 +88,12 @@ func ConnectResource(resource string) {
 	memAddr, aeAddr, elAddr := ReadConfig()
 	readline.SetCompletionFunction(completer)
 	readline.ParseAndBind("TAB: menu-complete")
-    	color := Colors{"\033[36m", "\033[0m"}
+	color := Colors{"\033[36m", "\033[0m"}
 	resource = strings.Replace(resource, " ", "", -1)
 
 memcached:
 
-	if resource == "memcached"  {
+	if resource == "memcached" {
 		for {
 			p := color.Set + "goched> " + color.Reset
 			cmd := readline.Readline(&p)
@@ -101,7 +101,7 @@ memcached:
 			if *cmd == "exit" || *cmd == "q" {
 				break
 			}
-			if strings.HasPrefix(*cmd, "aerospike")  {
+			if strings.HasPrefix(*cmd, "aerospike") {
 				resource = "aerospike"
 				goto aerospike
 			}
@@ -119,7 +119,7 @@ memcached:
 
 aerospike:
 
-	if resource == "aerospike"  {
+	if resource == "aerospike" {
 		for {
 			p := color.Set + "gospike> " + color.Reset
 			cmd := readline.Readline(&p)
@@ -127,11 +127,11 @@ aerospike:
 			if *cmd == "exit" || *cmd == "q" {
 				break
 			}
-			if strings.HasPrefix(*cmd, "memcached")  {
+			if strings.HasPrefix(*cmd, "memcached") {
 				resource = "memcached"
 				goto memcached
 			}
-			if strings.HasPrefix(*cmd, "elasticsearch")  {
+			if strings.HasPrefix(*cmd, "elasticsearch") {
 				resource = "elasticsearch"
 				goto elasticsearch
 			}
@@ -143,7 +143,7 @@ aerospike:
 	}
 
 elasticsearch:
-	if resource == "elasticsearch"  {
+	if resource == "elasticsearch" {
 		for {
 			p := color.Set + "gostic> " + color.Reset
 			cmd := readline.Readline(&p)
@@ -176,7 +176,7 @@ func main() {
 	memAddr, aeAddr, elAddr := ReadConfig()
 	var adr, c string
 	color := Colors{"\033[36m", "\033[0m"}
-    readline.SetCompletionFunction(completer)
+	readline.SetCompletionFunction(completer)
 	readline.ParseAndBind("TAB: menu-complete")
 	if len(os.Args[:]) > 1 {
 		if len(os.Args[:]) > 2 {
