@@ -40,4 +40,29 @@ goched> aerospike
 gospike> q   
 > exit
 ```
+Elasticsearch usage:  
+```
+root@duma:~$ ./atos                                                                                                                                                                              
+> elasticsearch
+gostic> get /
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=UTF-8
+Content-Length: 343
+
+{
+  "status" : 200,
+  "name" : "George Tarleton",
+  "cluster_name" : "elasticsearch",
+  "version" : {
+    "number" : "1.5.2",
+    "build_hash" : "62ff9868b4c8a0c45860bebb259e21980778ab1c",
+    "build_timestamp" : "2015-04-27T09:21:06Z",
+    "build_snapshot" : false,
+    "lucene_version" : "4.10.4"
+  },
+  "tagline" : "You Know, for Search"
+}
+
+gostic> 
+```
 Last commit add readline from github.com/fiorix/go-readline - tab and history
