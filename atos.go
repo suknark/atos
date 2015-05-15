@@ -103,9 +103,21 @@ func PrintHelp() {
 }
 
 func main() {
-	var resource string
+    memAddr, aeAddr := ReadConfig()
+	var resource, adr, c string
 	if len(os.Args[:]) > 1 {
-		ConnectResource(os.Args[1])
+        if len(os.Args[:])>2 {
+            if os.Args[1] == "memcached" { adr = memAddr }
+            if os.Args[1] == "aerospike" { adr = aeAddr }
+            for _, cc := range os.Args[2:] {
+                c = c + " " + cc
+            }
+            it, _ := StatsItems(c, adr)
+            fmt.Printf("%s\n", it)
+            os.Exit(0)
+        } else { 
+		    ConnectResource(os.Args[1])
+        }
 	}
 	for  {
 		fmt.Print("> ")
