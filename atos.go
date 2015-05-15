@@ -97,6 +97,7 @@ memcached:
 				goto aerospike
 			}
 			if *cmd == "elasticsearch" || *cmd == "el" {
+
 				resource = "elasticsearch"
 				goto elasticsearch
 			}
@@ -135,7 +136,7 @@ aerospike:
 elasticsearch:
 	if resource == "elasticsearch" || resource == "el" {
 		for {
-			p := "goched> "
+			p := "gostic> "
 			cmd := readline.Readline(&p)
 
 			if *cmd == "exit" || *cmd == "q" {
