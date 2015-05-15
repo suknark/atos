@@ -90,7 +90,7 @@ func ConnectResource(resource string) {
 
 memcached:
 
-	if resource == "memcached" || resource == "me" {
+	if resource == "memcached"  {
 		for {
 			p := color.Set + "goched> " + color.Reset
 			cmd := readline.Readline(&p)
@@ -98,11 +98,11 @@ memcached:
 			if *cmd == "exit" || *cmd == "q" {
 				break
 			}
-			if *cmd == "aerospike" || *cmd == "ae" {
+			if *cmd == "aerospike"  {
 				resource = "aerospike"
 				goto aerospike
 			}
-			if *cmd == "elasticsearch" || *cmd == "el" {
+			if *cmd == "elasticsearch"  {
 
 				resource = "elasticsearch"
 				goto elasticsearch
@@ -116,7 +116,7 @@ memcached:
 
 aerospike:
 
-	if resource == "aerospike" || resource == "ae" {
+	if resource == "aerospike"  {
 		for {
 			p := color.Set + "gospike> " + color.Reset
 			cmd := readline.Readline(&p)
@@ -124,11 +124,11 @@ aerospike:
 			if *cmd == "exit" || *cmd == "q" {
 				break
 			}
-			if *cmd == "memcached" || *cmd == "me" {
+			if *cmd == "memcached"  {
 				resource = "memcached"
 				goto memcached
 			}
-			if *cmd == "elasticsearch" || *cmd == "el" {
+			if *cmd == "elasticsearch"  {
 				resource = "elasticsearch"
 				goto elasticsearch
 			}
@@ -140,7 +140,7 @@ aerospike:
 	}
 
 elasticsearch:
-	if resource == "elasticsearch" || resource == "el" {
+	if resource == "elasticsearch"  {
 		for {
 			p := color.Set + "gostic> " + color.Reset
 			cmd := readline.Readline(&p)
@@ -148,12 +148,12 @@ elasticsearch:
 			if *cmd == "exit" || *cmd == "q" {
 				break
 			}
-			if *cmd == "memcached" || *cmd == "me" {
+			if *cmd == "memcached"  {
 				resource = "memcached"
 				goto memcached
 			}
 
-			if *cmd == "aerospike" || *cmd == "ae" {
+			if *cmd == "aerospike"  {
 				resource = "erospike"
 				goto aerospike
 			}
