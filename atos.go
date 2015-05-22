@@ -11,6 +11,7 @@ import (
 
 var coutsExamps = map[string][]string{
 	"m": {"memcached"},
+	"r": {"rabbitmq"},
 	"e": {"elasticsearch"},
 	"a": {"aerospike"},
 	"g": {"GET"},
@@ -26,6 +27,7 @@ type Config struct {
 	Memcached     string
 	Aerospike     string
 	Elasticsearch string
+	RabbitmqApi string
 }
 
 func completer(input, line string, start, end int) []string {
@@ -38,7 +40,7 @@ func completer(input, line string, start, end int) []string {
 	return []string{}
 }
 
-func ReadConfig() (string, string, string) {
+func ReadConfig() (string, string, string, string) {
 
 	file, _ := os.Open("config.json")
 	decoder := json.NewDecoder(file)
@@ -48,7 +50,7 @@ func ReadConfig() (string, string, string) {
 		fmt.Println("error:", err)
 		os.Exit(1)
 	}
-	return c.Memcached, c.Aerospike, c.Elasticsearch
+	return c.Memcached, c.Aerospike, c.Elasticsearch, c.RabbitmqApi
 }
 
 func StatsItems(command string, netAdr string) (string, error) {
@@ -66,6 +68,10 @@ func StatsItems(command string, netAdr string) (string, error) {
 	if strings.Index(netAdr, ":9200") != -1 {
 		command = strings.Replace(command, "\n", "", -1) + " HTTP/1.1\n"
 	}
+	if strings.Index(netAdr, ":15672") != -1 {
+		command = strings.Replace(command, "\n", "", -1) + " HTTP/1.1\n" + "Authorization: Basic Z3Vlc3Q6Z3Vlc3Q=\n"
+	}
+
 	_, err = conn.Write([]byte(command + "\n"))
 	if err != nil {
 		println("Write to server failed:", err.Error())
@@ -85,7 +91,7 @@ func StatsItems(command string, netAdr string) (string, error) {
 
 func ConnectResource(resource string) {
 
-	memAddr, aeAddr, elAddr := ReadConfig()
+	memAddr, aeAddr, elAddr, raAddr := ReadConfig()
 	readline.SetCompletionFunction(completer)
 	readline.ParseAndBind("TAB: menu-complete")
 	color := Colors{"\033[36m", "\033[0m"}
@@ -160,11 +166,39 @@ elasticsearch:
 				resource = "aerospike"
 				goto aerospike
 			}
+                        if strings.HasPrefix(*cmd, "rabbitmq") {
+                                resource = "rabbitmq"
+                                goto rabbitmq
+                        }
+
 			it, _ := StatsItems(*cmd, elAddr)
 			fmt.Printf("%s\n", it)
 			readline.AddHistory(*cmd)
 		}
 	}
+rabbitmq:
+        if resource == "rabbitmq" {
+                for {
+                        p := color.Set + "gomq> " + color.Reset
+                        cmd := readline.Readline(&p)
+                        
+                        if *cmd == "exit" || *cmd == "q" {
+                                break
+                        }       
+                        if strings.HasPrefix(*cmd, "memcached") {
+                                resource = "memcached"
+                                goto memcached
+                        }       
+                        
+                        if strings.HasPrefix(*cmd, "aerospike") {
+                                resource = "aerospike"
+                                goto aerospike
+                        }       
+                        it, _ := StatsItems(*cmd, raAddr)
+                        fmt.Printf("%s\n", it)
+                        readline.AddHistory(*cmd)
+                }       
+        }       
 
 }
 
@@ -173,7 +207,7 @@ func PrintHelp() {
 }
 
 func main() {
-	memAddr, aeAddr, elAddr := ReadConfig()
+	memAddr, aeAddr, elAddr, _ := ReadConfig()
 	var adr, c string
 	color := Colors{"\033[36m", "\033[0m"}
 	readline.SetCompletionFunction(completer)
